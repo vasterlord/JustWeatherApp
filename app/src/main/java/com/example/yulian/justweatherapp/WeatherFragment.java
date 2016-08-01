@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +37,7 @@ public class WeatherFragment extends Fragment {
     TextView currentTemperatureField;
     TextView weatherIcon;
     TextView descriptonField;
+    ProgressBar refresh_ProgressBar;
     FrameLayout focusFragment;
     Handler handler;
     String[] lastWeather = new String[6];
@@ -58,6 +60,7 @@ public class WeatherFragment extends Fragment {
         descriptonField = (TextView)rootView.findViewById(R.id.decription_field);
         weatherIcon = (TextView)rootView.findViewById(R.id.weather_icon);
         focusFragment = (FrameLayout)rootView.findViewById(R.id.focus_layout);
+        refresh_ProgressBar = (ProgressBar) rootView.findViewById(R.id.refresh_progresBar);
 
         weatherIcon.setTypeface(weatherFont);
         oldWeather = loadArray(curWeather,getContext());
@@ -91,7 +94,6 @@ public class WeatherFragment extends Fragment {
                                     getActivity().getString(R.string.no_internet_connetion),
                                     Toast.LENGTH_LONG).show();
                             lastWeatherPaste();
-                            Design();
                         }
                     });
                 }
@@ -99,7 +101,6 @@ public class WeatherFragment extends Fragment {
                     handler.post(new Runnable(){
                         public void run(){
                             renderWeather(json);
-                            Design();
                         }
                     });
                 }
@@ -130,11 +131,12 @@ public class WeatherFragment extends Fragment {
 
             DateFormat df = DateFormat.getDateTimeInstance();
             String updatedOn = df.format(new Date(json.getLong("dt")*1000));
-            updatedField.setText("Last update: " + updatedOn);
+            updatedField.setText("Last update: " + updatedOn.toUpperCase(Locale.US));
 
             setWeatherIcon(details.getInt("id"),
                     json.getJSONObject("sys").getLong("sunrise") * 1000,
                     json.getJSONObject("sys").getLong("sunset") * 1000);
+            Design();
             lastWeatherUp();
         }catch(Exception e){
             Log.e("JustWeather", "One or more fields not found in the JSON data");
@@ -169,9 +171,11 @@ public class WeatherFragment extends Fragment {
         }
         weatherIcon.setText(icon);
     }
+
     public void changeCity(String city){
         updateWeatherData(city);
     }
+
     public static boolean isOnline(Context context)
     {
         ConnectivityManager cm =
@@ -185,7 +189,7 @@ public class WeatherFragment extends Fragment {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////// Dynamical theme of app:
-    private void Design() {
+    public void Design() {
         if(weatherIcon.getText().toString() ==  getActivity().getString(R.string.weather_sunny)){
             focusFragment.setBackgroundResource(R.color.sunny);
             ColorWhite("#fffafa");

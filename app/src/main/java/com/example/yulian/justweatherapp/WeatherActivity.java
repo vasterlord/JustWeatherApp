@@ -13,9 +13,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.example.yulian.justweatherapp.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    WeatherFragment weatherFragment = new WeatherFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +53,16 @@ public class WeatherActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.change_city){
+        if(item.getItemId() == R.id.change_city)
+        {
             showInputDialog();
-        } else if(item.getItemId() == R.id.exit) {
+        }
+        else if(item.getItemId() == R.id.refresh)
+        {
+
+        }
+        else if(item.getItemId() == R.id.exit)
+        {
            finish();
         }
         return false;
